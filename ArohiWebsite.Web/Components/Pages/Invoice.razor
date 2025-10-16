@@ -1,0 +1,231 @@
+﻿@page "/invoice"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+
+
+<EditForm Model="@invoice" OnValidSubmit="GenerateInvoice">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+       
+        <div class="row">
+            
+            <!-- Notice -->
+            <div class="col col-md-4"></div>
+            <!-- Invoice -->
+            <div class="col col-md-8 bg-light shadow p-4 rounded">
+                <h2 class="text-center fw-bold mb-4">🧾 Arohi Trading Company</h2>
+                <!-- Invoice Info -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Invoice No</label>
+                        <InputText class="form-control" @bind-Value="invoice.InvoiceNumber" readonly />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Date</label>
+                        <InputDate @bind-Value="invoice.InvoiceDate" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Payment Status</label>
+                        <InputSelect class="form-select" @bind-Value="invoice.PaymentStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Paid">Paid</option>
+                        </InputSelect>
+                    </div>
+                </div>
+
+                <!-- Customer Info -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Customer Name</label>
+                        <InputText class="form-control" @bind-Value="invoice.CustomerName" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Mobile Number</label>
+                        <InputText class="form-control" @bind-Value="invoice.CustomerMobile" maxlength="10" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Address</label>
+                        <InputText class="form-control" @bind-Value="invoice.Address" />
+                    </div>
+                </div>
+
+                <!-- Product Details Input -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white fw-semibold">Product Details</div>
+                    <div class="card-body">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label">Product Name</label>
+                                <InputText class="form-control" @bind-Value="currentProduct.Name" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Quantity</label>
+                                <InputNumber TValue="int" class="form-control"
+                                             @bind-Value="currentProduct.Quantity"
+                                             @bind-Value:event="oninput" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Price (₹)</label>
+                                <InputNumber TValue="decimal" class="form-control"
+                                             @bind-Value="currentProduct.Price"
+                                             @bind-Value:event="oninput" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Amount (₹)</label>
+                                <input class="form-control" readonly
+                                       value="@(currentProduct.Quantity* currentProduct.Price)" />
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-success w-100" @onclick="AddProductToTable">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Table -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white fw-semibold">Products Added</div>
+                    <div class="card-body table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Qty</th>
+                                    <th>Price (₹)</th>
+                                    <th>Amount (₹)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (invoice.Products.Count == 0)
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No products added yet</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var item in invoice.Products)
+                                    {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Price.ToString("0.00")</td>
+                                            <td>@item.Amount.ToString("0.00")</td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveProduct(item)">🗑️</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Total Section -->
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6 text-end">
+                        <label class="form-label fw-semibold">Total Amount</label>
+                        <input class="form-control text-end fw-bold" readonly value="@invoice.TotalAmount.ToString("0.00")" />
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success px-5">💾 Save Invoice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@if (showSummary)
+{
+    <div class="container mt-5">
+        <div class="card shadow border-success">
+            <div class="card-header bg-success text-white fw-semibold">Invoice Summary</div>
+            <div class="card-body">
+                <p><strong>Invoice No:</strong> @invoice.InvoiceNumber</p>
+                <p><strong>Date:</strong> @invoice.InvoiceDate.ToShortDateString()</p>
+                <p><strong>Customer:</strong> @invoice.CustomerName (@invoice.CustomerMobile)</p>
+                <p><strong>Total Products:</strong> @invoice.Products.Count</p>
+                <p><strong>Total Amount:</strong> ₹@invoice.TotalAmount.ToString("0.00")</p>
+                <p><strong>Status:</strong> @invoice.PaymentStatus</p>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private InvoiceModel invoice = new();
+    private Product currentProduct = new Product();
+    private bool showSummary = false;
+
+    protected override void OnInitialized()
+    {
+        invoice.InvoiceNumber = $"INV-{DateTime.Now:yyyyMMdd}-{new Random().Next(100, 999)}";
+        invoice.InvoiceDate = DateTime.Now;
+        invoice.Products = new List<Product>();
+    }
+
+    private void AddProductToTable()
+    {
+        if (string.IsNullOrWhiteSpace(currentProduct.Name) || currentProduct.Quantity <= 0 || currentProduct.Price <= 0)
+            return;
+
+        currentProduct.Amount = currentProduct.Quantity * currentProduct.Price;
+
+        invoice.Products.Add(new Product
+        {
+            Name = currentProduct.Name,
+            Quantity = currentProduct.Quantity,
+            Price = currentProduct.Price,
+            Amount = currentProduct.Amount
+        });
+
+        currentProduct = new Product(); // clear inputs
+        UpdateTotalAmount();
+    }
+
+    private void RemoveProduct(Product item)
+    {
+        invoice.Products.Remove(item);
+        UpdateTotalAmount();
+    }
+
+    private void UpdateTotalAmount()
+    {
+        invoice.TotalAmount = invoice.Products.Sum(p => p.Amount);
+    }
+
+    private void GenerateInvoice()
+    {
+        UpdateTotalAmount();
+        showSummary = true;
+    }
+
+    public class InvoiceModel
+    {
+        public string InvoiceNumber { get; set; } = string.Empty;
+        public DateTime InvoiceDate { get; set; }
+        [Required] public string CustomerName { get; set; } = string.Empty;
+        [Required] public string Address { get; set; } = string.Empty;
+        [Required, RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Enter valid 10-digit mobile number")]
+        public string CustomerMobile { get; set; } = string.Empty;
+        public List<Product> Products { get; set; } = new();
+        public decimal TotalAmount { get; set; }
+        public string PaymentStatus { get; set; } = "Pending";
+    }
+
+    public class Product
+    {
+        [Required] public string Name { get; set; } = string.Empty;
+        [Range(1, int.MaxValue)] public int Quantity { get; set; } = 1;
+        [Range(0.01, double.MaxValue)] public decimal Price { get; set; } = 0.00m;
+        public decimal Amount { get; set; }
+    }
+}
