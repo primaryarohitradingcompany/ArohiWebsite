@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArohiWebsite.AppHost", "ArohiWebsite.AppHost\ArohiWebsite.AppHost.csproj", "{2C0DCF75-2A15-4459-B98E-11CD7DC5E52C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArohiWebsite.ServiceDefaults", "ArohiWebsite.ServiceDefaults\ArohiWebsite.ServiceDefaults.csproj", "{7349F972-FEE3-FE81-9EEA-5707483B569D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArohiWebsite.ApiService", "ArohiWebsite.ApiService\ArohiWebsite.ApiService.csproj", "{1D2BE944-B8EF-E930-1391-8D8CF87CE2D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArohiWebsite.Web", "ArohiWebsite.Web\ArohiWebsite.Web.csproj", "{324E735A-4CB8-4A08-6AB7-D269F1BA3B3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArohiWebsite.Tests", "ArohiWebsite.Tests\ArohiWebsite.Tests.csproj", "{6461F093-9CE8-70F9-0870-51A6887F50C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C0DCF75-2A15-4459-B98E-11CD7DC5E52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C0DCF75-2A15-4459-B98E-11CD7DC5E52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C0DCF75-2A15-4459-B98E-11CD7DC5E52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C0DCF75-2A15-4459-B98E-11CD7DC5E52C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7349F972-FEE3-FE81-9EEA-5707483B569D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7349F972-FEE3-FE81-9EEA-5707483B569D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7349F972-FEE3-FE81-9EEA-5707483B569D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7349F972-FEE3-FE81-9EEA-5707483B569D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D2BE944-B8EF-E930-1391-8D8CF87CE2D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D2BE944-B8EF-E930-1391-8D8CF87CE2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D2BE944-B8EF-E930-1391-8D8CF87CE2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D2BE944-B8EF-E930-1391-8D8CF87CE2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{324E735A-4CB8-4A08-6AB7-D269F1BA3B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{324E735A-4CB8-4A08-6AB7-D269F1BA3B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{324E735A-4CB8-4A08-6AB7-D269F1BA3B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{324E735A-4CB8-4A08-6AB7-D269F1BA3B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6461F093-9CE8-70F9-0870-51A6887F50C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6461F093-9CE8-70F9-0870-51A6887F50C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6461F093-9CE8-70F9-0870-51A6887F50C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6461F093-9CE8-70F9-0870-51A6887F50C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41EA3537-8A43-4A7F-850F-DC379BD0E3E9}
+	EndGlobalSection
+EndGlobal
