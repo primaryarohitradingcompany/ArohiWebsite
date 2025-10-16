@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: MyPool  # or your custom pool name
+  name: Default  # or your custom pool name
   demands:
     - agent.os -equals Windows  # or Linux/Mac depending on your agent
 
