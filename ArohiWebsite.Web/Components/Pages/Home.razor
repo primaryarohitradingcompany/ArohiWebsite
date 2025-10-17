@@ -1,7 +1,80 @@
 ﻿@page "/"
+<link href="~/arohi.css" rel="stylesheet" />
 
-<PageTitle>Home</PageTitle>
+<style>
+    p {
+        font-size: 1.25rem !important;
+        color: olive !important;
+    }
 
-<h1>Hello, world!</h1>
+    h1 {
+        font-size: 4.5rem !important;
+        color: peru !important;
+    }
 
-Welcome to your new app.
+    h2 {
+        font-size: 1.5rem !important;
+        color: peru !important;
+    }
+</style>
+<section class="about text-center">
+    <div class="row mt-4">
+        <div class="col-md-2 text-center">
+            <img src="logo.png" alt="Arohi Trading Logo" class="img-fluid"  />
+        </div> 
+        <div class="col-md-10">
+            <h1>Welcome to Arohi Trading Company</h1>
+            <p>
+                Arohi Trading Company is a trusted name in high-quality construction materials and steel works.
+                We specialize in steel gates, railings, PVC pipes, water summer systems, and cement supplies.
+            </p>    
+        </div>
+    </div>
+        
+</section>
+
+<section class="divisions container text-center">
+    <h3>Our Divisions</h3>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <img src="steel.jpg" class="card-img-top" alt="Steel Works">
+                <div class="card-body">
+                    <h2>Arohi Steel Works</h2>
+                    <p>Experts in steel gates, railings, glass, and wooden gate designs.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <img src="pvc.jpg" class="card-img-top" alt="PVC Pipe and Summer">
+                <div class="card-body">
+                    <h2>Arohi PVC Pipe & Summer</h2>
+                    <p>Durable PVC pipes and reliable summer water systems.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <img src="balu.jpg" class="card-img-top" alt="Balu Cement Store">
+                <div class="card-body">
+                    <h2>Arohi Balu Cement Store</h2>
+                    <p>Your trusted source for quality cement and construction materials.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact bg-light text-center p-4">
+    <h2>Contact Us</h2>
+    <p>
+        📍 Location: Near Petrol pump, Firozabad raod Fariha<br />
+        📞 Phone: +91 9897525658<br />
+        📧 Email: primary.arohitradingcompany@gmail.com
+    </p>
+</section>
+
+<footer class="footer text-center p-3 bg-dark text-white">
+    <p>© 2025 Arohi Trading Company | All Rights Reserved</p>
+</footer>

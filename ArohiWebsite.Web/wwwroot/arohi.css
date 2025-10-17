@@ -1,0 +1,19 @@
+.hero img {
+    height: 400px;
+    object-fit: cover;
+}
+
+.about, .divisions, .contact {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+footer {
+    font-size: 0.9rem;
+}
+
