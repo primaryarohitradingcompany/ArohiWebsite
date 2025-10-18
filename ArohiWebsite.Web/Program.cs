@@ -1,43 +1,37 @@
-using ArohiWebsite.Web;
-using ArohiWebsite.Web.Components;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add service defaults & Aspire client integrations.
-builder.AddServiceDefaults();
-
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-builder.Services.AddOutputCache();
-
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
-    {
-        // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
-        // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
-        client.BaseAddress = new("https+http://apiservice");
-    });
+// Add services
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor(); // keep if you use Server Blazor; remove if not applicable
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-app.UseAntiforgery();
+app.UseRouting();
 
-app.UseOutputCache();
+app.MapControllers();
 
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+// Map MVC endpoints under /mvc to avoid colliding with Blazor @page routes
+app.MapControllerRoute(
+    name: "mvc",
+    pattern: "mvc/{controller=Invoice}/{action=Index}/{id?}"
+);
 
-app.MapDefaultEndpoints();
+// Keep your Blazor fallback (pick the one that matches your project):
+// For Blazor Server:
+app.MapFallbackToPage("/_Host");
+// For Blazor WebAssembly hosted (uncomment if appropriate):
+// app.MapFallbackToFile("index.html");
 
 app.Run();

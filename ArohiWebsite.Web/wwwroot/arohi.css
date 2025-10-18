@@ -1,19 +1,197 @@
-.hero img {
-    height: 400px;
-    object-fit: cover;
+/* Arohi Invoice styles — modern card layout, subtle shadows, clear form controls */
+:root{
+  --invoice-bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --accent-blue: #2f6fe2;
+  --accent-dark: #495057;
+  --muted-gray: #6c757d;
+  --success-green: #16823a;
+  --danger-red: #e05656;
+  --card-shadow: 0 8px 24px rgba(22, 28, 37, 0.06);
 }
 
-.about, .divisions, .contact {
-    max-width: 1000px;
-    margin: auto;
+html,body {
+  height: 100%;
+  background: var(--invoice-bg);
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #222;
 }
 
-.card {
-    border-radius: 15px;
-    overflow: hidden;
+/* Center the invoice card in existing layout column */
+.col-md-8.bg-light.shadow.p-4.rounded,
+.invoice-card {
+  max-width: 820px;
+  margin: 28px auto;
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 28px;
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
-footer {
-    font-size: 0.9rem;
+/* Card header (title) */
+.invoice-card h2,
+.col-md-8.bg-light.shadow.p-4.rounded h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 18px;
+  color: #0f1724;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+/* small icon style next to title */
+.invoice-card h2 svg,
+.col-md-8.bg-light.shadow.p-4.rounded h2 svg {
+  font-size: 1.35rem;
+  color: var(--accent-blue);
+}
+
+/* Form labels and inputs */
+.form-label {
+  font-weight: 600;
+  color: var(--accent-dark);
+  font-size: .92rem;
+}
+
+.form-control {
+  border-radius: 6px;
+  border: 1px solid #e3e7eb;
+  background: #fff;
+  box-shadow: none;
+  height: 38px;
+  padding: .45rem .6rem;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+
+.form-control:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(47,111,226,0.08);
+  outline: none;
+}
+
+/* Product Details header (blue) */
+.card-header.bg-primary,
+.card-header.bg-primary.text-white {
+  background: linear-gradient(180deg,var(--accent-blue),#245fd8);
+  color: #fff;
+  border-radius: 6px;
+  padding: .75rem 1rem;
+  font-weight: 700;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.03);
+}
+
+/* Products Added header (dark grey) */
+.card-header.bg-secondary {
+  background: #5a6168;
+  color: #fff;
+  border-radius: 6px;
+  padding: .65rem 1rem;
+  font-weight: 700;
+}
+
+/* Product input row */
+.row.g-3.align-items-end > .col-md-4,
+.row.g-3.align-items-end > .col-md-2 {
+  padding-top: .35rem;
+}
+
+/* Add button (green) */
+.btn-success {
+  background-color: var(--success-green);
+  border-color: var(--success-green);
+  color: #fff;
+  border-radius: 6px;
+  padding: .45rem .9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(22, 28, 37, 0.06);
+}
+.btn-success:hover, .btn-success:focus {
+  background-color: #0f6d2e;
+  border-color: #0f6d2e;
+  transform: translateY(-1px);
+}
+
+/* Small danger btn for delete */
+.btn-danger {
+  background-color: var(--danger-red);
+  border-color: var(--danger-red);
+  color: #fff;
+}
+
+/* Products table */
+.table {
+  margin-bottom: 0;
+  background: transparent;
+}
+.table thead th {
+  border-bottom: none;
+  font-weight: 700;
+  color: #14181b;
+  background: rgba(0,0,0,0.02);
+}
+.table tbody td {
+  padding: .75rem 1rem;
+  vertical-align: middle;
+  border-top: 1px solid rgba(0,0,0,0.04);
+}
+
+/* 'No products added yet' style */
+.table tbody .text-muted {
+  padding: 2rem 0;
+  color: var(--muted-gray);
+}
+
+/* Total section */
+.total-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+.total-row .form-control {
+  width: 220px;
+  text-align: right;
+  font-weight: 700;
+  background: #fff;
+}
+
+/* Save Invoice button center */
+.text-center.mt-4 {
+  margin-top: 28px !important;
+}
+.text-center.mt-4 .btn {
+  min-width: 160px;
+}
+
+/* Invoice summary card */
+.card.border-success {
+  border-color: rgba(22, 160, 133, 0.12);
+}
+
+/* Small responsive tweaks */
+@media (max-width: 991px) {
+  .col-md-8.bg-light.shadow.p-4.rounded,
+  .invoice-card {
+    margin: 16px;
+    padding: 18px;
+  }
+
+  .total-row { justify-content: space-between; gap: 8px; }
+  .total-row .form-control { width: 140px; }
+}
+
+@media (max-width: 575px) {
+  .row.g-3.align-items-end .col-md-2,
+  .row.g-3.align-items-end .col-md-4 {
+    width: 100%;
+    display: block;
+  }
+  .row.g-3.align-items-end .d-flex { margin-top: 8px; }
+  .card-header.bg-primary, .card-header.bg-secondary { font-size: .95rem; padding:.6rem; }
 }
 

@@ -1,0 +1,276 @@
+﻿@model ArohiWebsite.Web.Models.InvoiceViewModel
+@{
+    Layout = "_Layout"; // keep the main layout
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-8 invoice-card">
+        <h2 class="text-center fw-bold mb-4">🧾 Arohi Trading Company</h2>
+        <form asp-action="Save" asp-controller="Invoice" method="post" onsubmit="return validateHasProducts()">
+            @Html.AntiForgeryToken()
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Invoice No</label>
+                    <input class="form-control" name="InvoiceNumber" value="@Model.InvoiceNumber" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-control" name="InvoiceDate" value="@Model.InvoiceDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Payment Status</label>
+                    <select class="form-select" name="PaymentStatus">
+                        <option value="Pending" selected="@("Pending" == Model.PaymentStatus)">Pending</option>
+                        <option value="Paid" selected="@("Paid" == Model.PaymentStatus)">Paid</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">Customer Name</label>
+                    <input class="form-control" name="CustomerName" value="@Model.CustomerName" />
+                    @Html.ValidationMessageFor(m => m.CustomerName)
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Mobile Number</label>
+                    <input class="form-control" name="CustomerMobile" value="@Model.CustomerMobile" maxlength="10" />
+                    @Html.ValidationMessageFor(m => m.CustomerMobile)
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Address</label>
+                    <input class="form-control" name="Address" value="@Model.Address" />
+                    @Html.ValidationMessageFor(m => m.Address)
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">Product Details</div>
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label">Product Name</label>
+                            <input id="prod-name" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Quantity</label>
+                            <input id="prod-qty" type="number" class="form-control" min="1" value="1" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Price (₹)</label>
+                            <input id="prod-price" type="number" step="0.01" class="form-control" min="0.01" value="0.00" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Amount (₹)</label>
+                            <input id="prod-amount" class="form-control" readonly value="0.00" />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-success w-100" onclick="addProduct()">Add</button>
+                        </div>
+                    </div>
+                    <div class="mt-2 small text-muted">Add products; they'll be submitted with the form.</div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-secondary text-white">Products Added</div>
+                <div class="card-body table-responsive">
+                    @if (ViewData.ModelState["Products"]?.Errors?.Count > 0)
+                    {
+                        <div class="alert alert-danger">@ViewData.ModelState["Products"].Errors[0].ErrorMessage</div>
+                    }
+
+                    <table id="products-table" class="table align-middle">
+                        <thead class="table-light">
+                            <tr><th>Product Name</th><th class="text-center">Qty</th><th class="text-end">Price (₹)</th><th class="text-end">Amount (₹)</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Products?.Count > 0)
+                            {
+                                for (int i = 0; i < Model.Products.Count; i++)
+                                {
+                                    <tr data-index="@i">
+                                        <td>@Model.Products[i].Name</td>
+                                        <td class="text-center">@Model.Products[i].Quantity</td>
+                                        <td class="text-end">@Model.Products[i].Price.ToString("0.00")</td>
+                                        <td class="text-end">@Model.Products[i].Amount.ToString("0.00")</td>
+                                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑️</button></td>
+
+                                        <!-- server-side initial inputs so model binding works if re-rendered after POST -->
+                                        <input type="hidden" name="Products[@i].Name" value="@Model.Products[i].Name" />
+                                        <input type="hidden" name="Products[@i].Quantity" value="@Model.Products[i].Quantity" />
+                                        <input type="hidden" name="Products[@i].Price" value="@Model.Products[i].Price" />
+                                        <input type="hidden" name="Products[@i].Amount" value="@Model.Products[i].Amount" />
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr id="no-products"><td colspan="5" class="text-center text-muted">No products added yet</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6"></div>
+                <div class="col-md-6 text-end">
+                    <label class="form-label fw-semibold">Total Amount</label>
+                    <input id="total-amount" class="form-control text-end fw-bold" name="TotalAmount" readonly value="@Model.TotalAmount.ToString("0.00")" />
+                </div>
+            </div>
+
+            <div class="text-center mb-5">
+                <button type="submit" class="btn btn-success px-5">💾 Save Invoice</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.ShowSummary)
+{
+    <div class="card border-success mb-4">
+        <div class="card-header bg-success text-white">Invoice Summary</div>
+        <div class="card-body">
+            <p><strong>Invoice No:</strong> @Model.InvoiceNumber</p>
+            <p><strong>Date:</strong> @Model.InvoiceDate.ToShortDateString()</p>
+            <p><strong>Customer:</strong> @Model.CustomerName (@Model.CustomerMobile)</p>
+            <p><strong>Total Products:</strong> @Model.Products?.Count</p>
+            <p><strong>Total Amount:</strong> ₹@Model.TotalAmount.ToString("0.00")</p>
+            <p><strong>Status:</strong> @Model.PaymentStatus</p>
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script>
+    const productIndexStart = document.querySelectorAll('#products-table tbody tr[data-index]').length || 0;
+    window.productIndex = productIndexStart;
+
+    const nameEl = document.getElementById('prod-name');
+    const qtyEl = document.getElementById('prod-qty');
+    const priceEl = document.getElementById('prod-price');
+    const amountEl = document.getElementById('prod-amount');
+    const tableBody = document.querySelector('#products-table tbody');
+    const totalEl = document.getElementById('total-amount');
+
+    function calcAmount() {
+        const q = parseFloat(qtyEl.value) || 0;
+        const p = parseFloat(priceEl.value) || 0;
+        amountEl.value = (q * p).toFixed(2);
+    }
+
+    if (qtyEl) qtyEl.addEventListener('input', calcAmount);
+    if (priceEl) priceEl.addEventListener('input', calcAmount);
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (m) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+        });
+    }
+    function escapeAttr(s) {
+        return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('#products-table tbody tr').forEach(r => {
+            if (r.id === 'no-products') return;
+            const amt = r.querySelector('input[type="hidden"][name$=".Amount"]')?.value
+                || r.cells[3]?.textContent;
+            total += parseFloat(amt) || 0;
+        });
+        totalEl.value = total.toFixed(2);
+    }
+
+    function clearProductInputs() {
+        nameEl.value = '';
+        qtyEl.value = 1;
+        priceEl.value = '0.00';
+        amountEl.value = '0.00';
+        nameEl.focus();
+    }
+
+    function reindexHiddenInputs() {
+        const rows = document.querySelectorAll('#products-table tbody tr');
+        let idx = 0;
+        rows.forEach(r => {
+            if (r.id === 'no-products') return;
+            r.setAttribute('data-index', idx);
+            const hidden = r.querySelectorAll('input[type="hidden"]');
+            if (hidden.length === 4) {
+                hidden[0].name = `Products[${idx}].Name`;
+                hidden[1].name = `Products[${idx}].Quantity`;
+                hidden[2].name = `Products[${idx}].Price`;
+                hidden[3].name = `Products[${idx}].Amount`;
+            }
+            idx++;
+        });
+        window.productIndex = idx;
+    }
+
+    function addProduct() {
+        const name = nameEl.value.trim();
+        const qty = parseInt(qtyEl.value) || 0;
+        const price = parseFloat(priceEl.value) || 0;
+        const amount = parseFloat((qty * price).toFixed(2));
+
+        if (!name || qty <= 0 || price <= 0) {
+            alert('Enter valid product name, quantity and price.');
+            return;
+        }
+
+        const noProducts = document.getElementById('no-products');
+        if (noProducts) noProducts.remove();
+
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-index', window.productIndex);
+
+        tr.innerHTML = `
+            <td>${escapeHtml(name)}</td>
+            <td class="text-center">${qty}</td>
+            <td class="text-end">${price.toFixed(2)}</td>
+            <td class="text-end">${amount.toFixed(2)}</td>
+            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑️</button></td>
+
+            <input type="hidden" name="Products[${window.productIndex}].Name" value="${escapeAttr(name)}" />
+            <input type="hidden" name="Products[${window.productIndex}].Quantity" value="${qty}" />
+            <input type="hidden" name="Products[${window.productIndex}].Price" value="${price}" />
+            <input type="hidden" name="Products[${window.productIndex}].Amount" value="${amount}" />
+        `;
+
+        tableBody.appendChild(tr);
+        window.productIndex++;
+        clearProductInputs();
+        updateTotal();
+    }
+
+    function removeRow(btn) {
+        const tr = btn.closest('tr');
+        tr.remove();
+        reindexHiddenInputs();
+        updateTotal();
+        if (document.querySelectorAll('#products-table tbody tr').length === 0) {
+            const row = document.createElement('tr');
+            row.id = 'no-products';
+            row.innerHTML = '<td colspan="5" class="text-center text-muted">No products added yet</td>';
+            tableBody.appendChild(row);
+        }
+    }
+
+    function validateHasProducts() {
+        const rows = Array.from(document.querySelectorAll('#products-table tbody tr'));
+        const realRows = rows.filter(r => r.id !== 'no-products');
+        if (realRows.length === 0) {
+            alert('Please add at least one product before saving the invoice.');
+            return false;
+        }
+        return true;
+    }
+
+    // initialize total (if server rendered products exist)
+    updateTotal();
+</script>
+}
